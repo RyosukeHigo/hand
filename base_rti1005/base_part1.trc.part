@@ -1,0 +1,869 @@
+-- ******** Model variables ***************************************************
+
+group "Model Root"
+{
+ flags: COLLAPSED
+}
+	group "Display" -- block-group
+	{
+	 block: "Display"
+	 desc:  ""
+	 flags: BLOCK|COLLAPSED
+	}
+		p_base_B_real_T_0[0]
+		{
+		 type:    flt(64,IEEE)*
+		 alias:   "In1"
+		 desc:    ""
+		 flags:   SINK|READONLY
+		}
+
+
+
+	endgroup -- block-group "Display"
+
+	group "Display1" -- block-group
+	{
+	 block: "Display"
+	 desc:  ""
+	 flags: BLOCK|COLLAPSED
+	}
+		p_base_B_real_T_0[1]
+		{
+		 type:    flt(64,IEEE)*
+		 alias:   "In1"
+		 desc:    ""
+		 flags:   SINK|READONLY
+		}
+
+
+
+	endgroup -- block-group "Display1"
+
+	group "DS4504_ETH_Setup" -- block-group
+	{
+	 block: "S-Function"
+	 desc:  ""
+	 flags: BLOCK|COLLAPSED
+	}
+		p_base_B_real_T_0[0]
+		{
+		 type:    flt(64,IEEE)*
+		 alias:   "Out1"
+		 desc:    ""
+		 flags:   OUTPUT|READONLY
+		}
+		p_base_B_real_T_0[1]
+		{
+		 type:    flt(64,IEEE)*
+		 alias:   "Out2"
+		 desc:    ""
+		 flags:   OUTPUT|READONLY
+		}
+		p_base_B_real_T_0[2]
+		{
+		 type:    flt(64,IEEE)*
+		 alias:   "Out3"
+		 desc:    ""
+		 flags:   OUTPUT|READONLY
+		}
+
+		p_base_P_real_T_0[2]
+		{
+		 type:    flt(64,IEEE)*
+		 alias:   "P1"
+		 flags:   PARAM
+		}
+		p_base_P_real_T_0[5]
+		{
+		 type:    flt(64,IEEE)*
+		 alias:   "P2"
+		 flags:   PARAM
+		}
+		p_base_P_real_T_0[8]
+		{
+		 type:    flt(64,IEEE)*
+		 alias:   "P3"
+		 flags:   PARAM
+		}
+		p_base_P_real_T_0[11]
+		{
+		 type:    flt(64,IEEE)*
+		 alias:   "P4"
+		 flags:   PARAM
+		}
+		p_base_P_real_T_0[14]
+		{
+		 type:    flt(64,IEEE)*
+		 alias:   "P5"
+		 flags:   PARAM
+		}
+		p_base_P_real_T_0[17]
+		{
+		 type:    flt(64,IEEE)*
+		 alias:   "P6"
+		 flags:   PARAM
+		}
+		p_base_P_real_T_0[20]
+		{
+		 type:    flt(64,IEEE)*
+		 alias:   "P7"
+		 flags:   PARAM
+		}
+		p_base_P_real_T_0[23]
+		{
+		 type:    flt(64,IEEE)*
+		 alias:   "P8"
+		 flags:   PARAM
+		}
+		p_base_P_real_T_0[26]
+		{
+		 type:    flt(64,IEEE)*
+		 alias:   "P9"
+		 flags:   PARAM
+		}
+		p_base_P_real_T_0[29]
+		{
+		 type:    flt(64,IEEE)*
+		 alias:   "P10"
+		 flags:   PARAM
+		}
+		p_base_P_real_T_0[32]
+		{
+		 type:    flt(64,IEEE)*
+		 alias:   "P11"
+		 flags:   PARAM
+		}
+		p_base_P_real_T_0[35]
+		{
+		 type:    flt(64,IEEE)*
+		 alias:   "P12"
+		 flags:   PARAM
+		}
+		p_base_P_real_T_0[38]
+		{
+		 type:    flt(64,IEEE)*
+		 alias:   "P13"
+		 flags:   PARAM
+		}
+		p_base_P_real_T_0[41]
+		{
+		 type:    flt(64,IEEE)*
+		 alias:   "P14"
+		 flags:   PARAM
+		}
+		p_base_P_real_T_0[44]
+		{
+		 type:    flt(64,IEEE)*
+		 alias:   "P15"
+		 flags:   PARAM
+		}
+		p_base_P_real_T_0[47]
+		{
+		 type:    flt(64,IEEE)*
+		 alias:   "P16"
+		 flags:   PARAM
+		}
+		p_base_P_real_T_0[50]
+		{
+		 type:    flt(64,IEEE)*
+		 alias:   "P17"
+		 flags:   PARAM
+		}
+		p_base_P_real_T_0[53]
+		{
+		 type:    flt(64,IEEE)*
+		 alias:   "P18"
+		 flags:   PARAM
+		}
+		p_base_P_real_T_0[56]
+		{
+		 type:    flt(64,IEEE)*
+		 alias:   "P19"
+		 flags:   PARAM
+		}
+		p_base_P_real_T_0[59]
+		{
+		 type:    flt(64,IEEE)*
+		 alias:   "P20"
+		 flags:   PARAM
+		}
+		p_base_P_real_T_0[62]
+		{
+		 type:    flt(64,IEEE)*
+		 alias:   "P21"
+		 flags:   PARAM
+		}
+		p_base_P_real_T_0[65]
+		{
+		 type:    flt(64,IEEE)*
+		 alias:   "P22"
+		 flags:   PARAM
+		}
+		p_base_P_real_T_0[68]
+		{
+		 type:    flt(64,IEEE)*
+		 alias:   "P23"
+		 flags:   PARAM
+		}
+		p_base_P_real_T_0[71]
+		{
+		 type:    flt(64,IEEE)*
+		 alias:   "P24"
+		 flags:   PARAM
+		}
+		p_base_P_real_T_0[74]
+		{
+		 type:    flt(64,IEEE)*
+		 alias:   "P25"
+		 flags:   PARAM
+		}
+		p_base_P_real_T_0[77]
+		{
+		 type:    flt(64,IEEE)*
+		 alias:   "P26"
+		 flags:   PARAM
+		}
+		p_base_P_real_T_0[80]
+		{
+		 type:    flt(64,IEEE)*
+		 alias:   "P27"
+		 flags:   PARAM
+		}
+		p_base_P_real_T_0[83]
+		{
+		 type:    flt(64,IEEE)*
+		 alias:   "P28"
+		 flags:   PARAM
+		}
+		p_base_P_real_T_0[86]
+		{
+		 type:    flt(64,IEEE)*
+		 alias:   "P29"
+		 flags:   PARAM
+		}
+		p_base_P_real_T_0[89]
+		{
+		 type:    flt(64,IEEE)*
+		 alias:   "P30"
+		 flags:   PARAM
+		}
+		p_base_P_real_T_0[92]
+		{
+		 type:    flt(64,IEEE)*
+		 alias:   "P31"
+		 flags:   PARAM
+		}
+		p_base_P_real_T_0[95]
+		{
+		 type:    flt(64,IEEE)*
+		 alias:   "P32"
+		 flags:   PARAM
+		}
+		p_base_P_real_T_0[98]
+		{
+		 type:    flt(64,IEEE)*
+		 alias:   "P33"
+		 flags:   PARAM
+		}
+		p_base_P_real_T_0[101]
+		{
+		 type:    flt(64,IEEE)*
+		 alias:   "P34"
+		 flags:   PARAM
+		}
+		p_base_P_real_T_0[104]
+		{
+		 type:    flt(64,IEEE)*
+		 alias:   "P35"
+		 flags:   PARAM
+		}
+
+
+	endgroup -- block-group "DS4504_ETH_Setup"
+
+	group "System Setting" -- block-group
+	{
+	 block: "S-Function"
+	 desc:  ""
+	 flags: BLOCK|COLLAPSED
+	}
+		p_base_B_int32_T_1[0]
+		{
+		 type:    int(32)*
+		 alias:   "Out1"
+		 desc:    ""
+		 flags:   OUTPUT|READONLY
+		}
+
+
+	endgroup -- block-group "System Setting"
+
+  
+  
+	group "Application" -- subsystem-group
+	{
+	 flags: COLLAPSED
+	 desc:  ""
+	}
+
+
+
+		group "Data Store Memory\nImage" -- block-group
+		{
+		 block: "DataStoreMemory"
+		 desc:  ""
+		 flags: BLOCK|COLLAPSED
+		}
+
+			p_base_P_real_T_0[142]
+			{
+			 type:    base_ArrayDT0_16*
+			 alias:   "InitialValue"
+			 flags:   PARAM
+			}
+
+
+		endgroup -- block-group "Data Store Memory\nImage"
+
+		group "Data Store Memory\nObject" -- block-group
+		{
+		 block: "DataStoreMemory"
+		 desc:  ""
+		 flags: BLOCK|COLLAPSED
+		}
+
+			p_base_P_real_T_0[158]
+			{
+			 type:    base_ArrayDT0_16*
+			 alias:   "InitialValue"
+			 flags:   PARAM
+			}
+
+
+		endgroup -- block-group "Data Store Memory\nObject"
+
+		group "Constant" -- block-group
+		{
+		 block: "Constant"
+		 desc:  ""
+		 flags: BLOCK|COLLAPSED
+		}
+			-- Skipping output Out1
+			p_base_P_real_T_0[105]
+			{
+			 type:    flt(64,IEEE)*
+			 alias:   "Value"
+			 flags:   PARAM
+			}
+
+
+		endgroup -- block-group "Constant"
+
+		group "Data Store\nWrite" -- block-group
+		{
+		 block: "DataStoreWrite"
+		 desc:  ""
+		 flags: BLOCK|COLLAPSED
+		}
+			p_base_B_real_T_0[3]
+			{
+			 type:    base_ArrayDT0_16*
+			 alias:   "In1"
+			 desc:    ""
+			 flags:   SINK|READONLY
+			}
+
+
+
+		endgroup -- block-group "Data Store\nWrite"
+
+		group "Enable" -- block-group
+		{
+		 block: "EnablePort"
+		 desc:  ""
+		 flags: BLOCK|COLLAPSED
+		}
+
+
+
+		endgroup -- block-group "Enable"
+
+		group "CPV Image Processing" -- block-group
+		{
+		 block: "S-Function"
+		 desc:  ""
+		 flags: BLOCK|COLLAPSED
+		}
+			p_base_B_real_T_0[3]
+			{
+			 type:    base_ArrayDT0_16*
+			 alias:   "Out1"
+			 desc:    ""
+			 flags:   OUTPUT|READONLY
+			}
+
+
+		endgroup -- block-group "CPV Image Processing"
+
+		group "DS4504_ETH_Receive" -- block-group
+		{
+		 block: "S-Function"
+		 desc:  ""
+		 flags: BLOCK|COLLAPSED
+		}
+			p_base_B_uint32_T_2[0]
+			{
+			 type:    base_ArrayDT7_8*
+			 alias:   "Out1"
+			 desc:    ""
+			 flags:   OUTPUT|READONLY
+			}
+			p_base_B_real_T_0[36]
+			{
+			 type:    flt(64,IEEE)*
+			 alias:   "Out2"
+			 desc:    ""
+			 flags:   OUTPUT|READONLY
+			}
+			p_base_B_real_T_0[37]
+			{
+			 type:    flt(64,IEEE)*
+			 alias:   "Out3"
+			 desc:    ""
+			 flags:   OUTPUT|READONLY
+			}
+			p_base_B_real_T_0[38]
+			{
+			 type:    flt(64,IEEE)*
+			 alias:   "Out4"
+			 desc:    ""
+			 flags:   OUTPUT|READONLY
+			}
+			p_base_B_real_T_0[39]
+			{
+			 type:    base_ArrayDT0_4*
+			 alias:   "Out5"
+			 desc:    ""
+			 flags:   OUTPUT|READONLY
+			}
+
+			p_base_P_real_T_0[108]
+			{
+			 type:    flt(64,IEEE)*
+			 alias:   "P1"
+			 flags:   PARAM
+			}
+			p_base_P_real_T_0[111]
+			{
+			 type:    flt(64,IEEE)*
+			 alias:   "P2"
+			 flags:   PARAM
+			}
+			p_base_P_real_T_0[114]
+			{
+			 type:    flt(64,IEEE)*
+			 alias:   "P3"
+			 flags:   PARAM
+			}
+			p_base_P_real_T_0[117]
+			{
+			 type:    flt(64,IEEE)*
+			 alias:   "P4"
+			 flags:   PARAM
+			}
+			p_base_P_real_T_0[120]
+			{
+			 type:    flt(64,IEEE)*
+			 alias:   "P5"
+			 flags:   PARAM
+			}
+			p_base_P_real_T_0[123]
+			{
+			 type:    flt(64,IEEE)*
+			 alias:   "P6"
+			 flags:   PARAM
+			}
+
+
+		endgroup -- block-group "DS4504_ETH_Receive"
+
+		group "DSDecode32 " -- block-group
+		{
+		 block: "S-Function"
+		 desc:  ""
+		 flags: BLOCK|COLLAPSED
+		}
+			p_base_B_real_T_0[43]
+			{
+			 type:    base_ArrayDT0_4*
+			 alias:   "Out1"
+			 desc:    ""
+			 flags:   OUTPUT|READONLY
+			}
+
+			p_base_P_real_T_0[126]
+			{
+			 type:    flt(64,IEEE)*
+			 alias:   "P1"
+			 flags:   PARAM
+			}
+			p_base_P_real_T_0[129]
+			{
+			 type:    flt(64,IEEE)*
+			 alias:   "P2"
+			 flags:   PARAM
+			}
+			p_base_P_real_T_0[132]
+			{
+			 type:    flt(64,IEEE)*
+			 alias:   "P3"
+			 flags:   PARAM
+			}
+			p_base_P_real_T_0[135]
+			{
+			 type:    flt(64,IEEE)*
+			 alias:   "P4"
+			 flags:   PARAM
+			}
+			p_base_P_real_T_0[138]
+			{
+			 type:    flt(64,IEEE)*
+			 alias:   "P5"
+			 flags:   PARAM
+			}
+			p_base_P_real_T_0[141]
+			{
+			 type:    flt(64,IEEE)*
+			 alias:   "P6"
+			 flags:   PARAM
+			}
+
+
+		endgroup -- block-group "DSDecode32 "
+
+		group "Task Setting" -- block-group
+		{
+		 block: "S-Function"
+		 desc:  ""
+		 flags: BLOCK|COLLAPSED
+		}
+			p_base_B_real_T_0[19]
+			{
+			 type:    flt(64,IEEE)*
+			 alias:   "Out1"
+			 desc:    ""
+			 flags:   OUTPUT|READONLY
+			}
+
+
+		endgroup -- block-group "Task Setting"
+
+  
+  
+		group "Hand02 Control" -- subsystem-group
+		{
+		 flags: COLLAPSED
+		 desc:  ""
+		}
+
+
+
+			group "Ref Angle" -- block-group
+			{
+			 block: "Inport"
+			 desc:  ""
+			 flags: BLOCK|COLLAPSED
+			}
+				p_base_B_real_T_0[57]
+				{
+				 type:    base_ArrayDT0_10*
+				 alias:   "Out1"
+				 desc:    ""
+				 flags:   OUTPUT|READONLY
+				}
+
+
+			endgroup -- block-group "Ref Angle"
+
+			group "hand02Ctrl" -- block-group
+			{
+			 block: "S-Function"
+			 desc:  ""
+			 flags: BLOCK|COLLAPSED
+			}
+				p_base_B_real_T_0[77]
+				{
+				 type:    base_ArrayDT0_10*
+				 alias:   "Out1"
+				 desc:    ""
+				 flags:   OUTPUT|READONLY
+				}
+
+
+			endgroup -- block-group "hand02Ctrl"
+
+			group "hand02DALimit" -- block-group
+			{
+			 block: "S-Function"
+			 desc:  ""
+			 flags: BLOCK|COLLAPSED
+			}
+				p_base_B_real_T_0[97]
+				{
+				 type:    base_ArrayDT0_10*
+				 alias:   "Out1"
+				 desc:    ""
+				 flags:   OUTPUT|READONLY
+				}
+
+
+			endgroup -- block-group "hand02DALimit"
+
+			group "hand02Enc2JntAng" -- block-group
+			{
+			 block: "S-Function"
+			 desc:  ""
+			 flags: BLOCK|COLLAPSED
+			}
+				p_base_B_real_T_0[67]
+				{
+				 type:    base_ArrayDT0_10*
+				 alias:   "Out1"
+				 desc:    ""
+				 flags:   OUTPUT|READONLY
+				}
+
+
+			endgroup -- block-group "hand02Enc2JntAng"
+
+			group "hand02JntTrq2DA" -- block-group
+			{
+			 block: "S-Function"
+			 desc:  ""
+			 flags: BLOCK|COLLAPSED
+			}
+				p_base_B_real_T_0[87]
+				{
+				 type:    base_ArrayDT0_10*
+				 alias:   "Out1"
+				 desc:    ""
+				 flags:   OUTPUT|READONLY
+				}
+
+
+			endgroup -- block-group "hand02JntTrq2DA"
+
+
+
+		endgroup -- subsystem-group "Hand02 Control"
+  
+  
+		group "Hand02 Trajectory" -- subsystem-group
+		{
+		 flags: COLLAPSED
+		 desc:  ""
+		}
+
+			p_base_B_real_T_0[57]
+			{
+			 type:    base_ArrayDT0_10*
+			 alias:   "Ref Angle"
+			 desc:    ""
+			 flags:   OUTPUT|READONLY
+			}
+
+
+			group "Time" -- block-group
+			{
+			 block: "Inport"
+			 desc:  ""
+			 flags: BLOCK|COLLAPSED
+			}
+				p_base_B_real_T_0[19]
+				{
+				 type:    flt(64,IEEE)*
+				 alias:   "Out1"
+				 desc:    ""
+				 flags:   OUTPUT|READONLY
+				}
+
+
+			endgroup -- block-group "Time"
+
+			group "tactile value" -- block-group
+			{
+			 block: "Inport"
+			 desc:  ""
+			 flags: BLOCK|COLLAPSED
+			}
+				-- Skipping output Out1
+
+
+			endgroup -- block-group "tactile value"
+
+			group "camera" -- block-group
+			{
+			 block: "Inport"
+			 desc:  ""
+			 flags: BLOCK|COLLAPSED
+			}
+				p_base_B_real_T_0[43]
+				{
+				 type:    base_ArrayDT0_4*
+				 alias:   "Out1"
+				 desc:    ""
+				 flags:   OUTPUT|READONLY
+				}
+
+
+			endgroup -- block-group "camera"
+
+			group "Data Store\nRead" -- block-group
+			{
+			 block: "DataStoreRead"
+			 desc:  ""
+			 flags: BLOCK|COLLAPSED
+			}
+				p_base_B_real_T_0[20]
+				{
+				 type:    base_ArrayDT0_16*
+				 alias:   "Out1"
+				 desc:    ""
+				 flags:   OUTPUT|READONLY
+				}
+
+
+			endgroup -- block-group "Data Store\nRead"
+
+			group "hand02JntAngLimit" -- block-group
+			{
+			 block: "S-Function"
+			 desc:  ""
+			 flags: BLOCK|COLLAPSED
+			}
+				p_base_B_real_T_0[57]
+				{
+				 type:    base_ArrayDT0_10*
+				 alias:   "Out1"
+				 desc:    ""
+				 flags:   OUTPUT|READONLY
+				}
+
+
+			endgroup -- block-group "hand02JntAngLimit"
+
+			group "hand02Traj" -- block-group
+			{
+			 block: "S-Function"
+			 desc:  ""
+			 flags: BLOCK|COLLAPSED
+			}
+				p_base_B_real_T_0[47]
+				{
+				 type:    base_ArrayDT0_10*
+				 alias:   "Out1"
+				 desc:    ""
+				 flags:   OUTPUT|READONLY
+				}
+
+
+			endgroup -- block-group "hand02Traj"
+
+
+
+		endgroup -- subsystem-group "Hand02 Trajectory"
+
+
+	endgroup -- subsystem-group "Application"
+  
+  
+	group "DS100x_AliveFunctionality" -- subsystem-group
+	{
+	 flags: COLLAPSED
+	 desc:  ""
+	}
+
+
+
+  
+  
+		group "AliveGenSubsystem" -- subsystem-group
+		{
+		 flags: COLLAPSED
+		 desc:  ""
+		}
+
+
+
+			group "DS100x_AliveFunction" -- block-group
+			{
+			 block: "S-Function"
+			 desc:  ""
+			 flags: BLOCK|COLLAPSED
+			}
+
+
+				p_base_P_real_T_0[176]
+				{
+				 type:    flt(64,IEEE)*
+				 alias:   "P1"
+				 flags:   PARAM
+				}
+
+
+			endgroup -- block-group "DS100x_AliveFunction"
+
+			group "function" -- block-group
+			{
+			 block: "TriggerPort"
+			 desc:  ""
+			 flags: BLOCK|COLLAPSED
+			}
+
+
+
+			endgroup -- block-group "function"
+
+
+
+		endgroup -- subsystem-group "AliveGenSubsystem"
+  
+  
+		group "Background" -- subsystem-group
+		{
+		 flags: COLLAPSED
+		 desc:  ""
+		}
+
+			-- Skipping output Outputport
+
+		endgroup -- subsystem-group "Background"
+
+
+	endgroup -- subsystem-group "DS100x_AliveFunctionality"
+  
+  
+	group "RTI Data" -- subsystem-group
+	{
+	 flags: COLLAPSED
+	 desc:  ""
+	}
+
+
+	endgroup -- subsystem-group "RTI Data"
+  
+  
+	group "simState SET" -- subsystem-group
+	{
+	 flags: COLLAPSED
+	 desc:  ""
+	}
+
+
+	endgroup -- subsystem-group "simState SET"
+
+
+
+
+endgroup -- "Model Root"

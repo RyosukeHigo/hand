@@ -1,0 +1,46 @@
+-- ******** Tunable Parameters ************************************************
+
+-- InlineParameters is off: no separate group for Tunable Parameters
+
+
+-- ******** State Machine Data ************************************************
+
+-- No Stateflow chart within the model.
+
+
+-- ******** Data Store Memories ***********************************************
+
+group "Data Stores"
+{
+ flags: COLLAPSED
+}
+	p_base_DWork_real_T_0[0]
+	{
+	 type:   base_ArrayDT0_16*
+	 alias:  "Image"
+	 origin: "base/Application/Data Store Memory\nImage"
+	 flags:  DSM
+	}
+	p_base_DWork_real_T_0[16]
+	{
+	 type:   base_ArrayDT0_16*
+	 alias:  "Object"
+	 origin: "base/Application/Data Store Memory\nObject"
+	 flags:  DSM
+	}
+endgroup
+
+
+-- ******** Labels ************************************************************
+
+group "Labels"
+{
+ flags: COLLAPSED
+}
+
+endgroup
+
+-- ******** RTT Dynamic Variables *********************************************
+
+-- Generation of RTT Dynamic Variables turned off with EnableRealTimeTesting option.
+

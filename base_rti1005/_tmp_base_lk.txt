@@ -1,0 +1,1 @@
+-- call "C:\PPCTools35\BIN\lnkppc.exe"  -QmsA0314 -QmeA0307 -m ..\base.map -o ..\base.ppc -c _tmp_base.lk 

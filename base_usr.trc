@@ -1,0 +1,25 @@
+-- ******** accessible variable for Control Desk *********
+
+app_num
+{
+	type:	uint
+	desc:	"Demo Number"
+}
+
+host_access_flag
+{
+	type:	int
+	desc:	"Flag Variable for Host Communication"
+}
+
+prog_addr
+{
+	type:	uint
+	desc:	"Address Variable for CPV Program"
+}
+
+prog_data
+{
+	type:	uint
+	desc:	"Data Variable for CPV Program"
+}
