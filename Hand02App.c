@@ -69,19 +69,19 @@ extern unsigned int app_num = 0;
 // ref_jnt_ang[HAND_M10]：手首屈曲軸
 #define LEFT_FINGER 0
 #define MIDDLE_FINGER 1
-#define RIGHT_FINGER 2 
+#define RIGHT_FINGER 2
 
 //ハンドのリンクの長さ2018-01-19
 const double Lr = 0.030;
-const double L1 = 0.0639;//指付け根リンク長
+const double L1 = 0.0639; //指付け根リンク長
 //const double L2 = 0.0365;//指先リンク長　半球の中心を指先とする場合は0.0365m　指先の場合0.045m
 //const double L2 = 0.049; //指サックつけたとき
-const double r = 0.045 - 0.0365;//指先半球の半径
+const double r = 0.045 - 0.0365; //指先半球の半径
 const double Lpr = 0.03;
 const double Lpm = 0.0;
 const double Lpl = -0.03;
 //const double Lw0 = 0.105;
-const double Lw1 = 0.0515;//設計図の0.045という値は正しくない　実際に測ると0.0515となった　2018/02/10
+const double Lw1 = 0.0515; //設計図の0.045という値は正しくない　実際に測ると0.0515となった　2018/02/10
 //重心位置をグローバルで保存cog_writeで書き込み制限
 double cog_x = 0.0;
 double cog_y = 0.0;
@@ -163,12 +163,12 @@ void invKine(HANDJnt ref_jnt_ang, HANDJnt prepare_jnt_ang1, double time, double 
 	//
 	//手首屈曲関節
 	double L2 = 0.0365;
-	if(finger_type == MIDDLE_FINGER)
+	if (finger_type == MIDDLE_FINGER)
 	{
 		L2 = 0.0525;
 	}
 	double Lw0 = 0.105;
-	if(finger_type == MIDDLE_FINGER)
+	if (finger_type == MIDDLE_FINGER)
 	{
 		Lw0 += 0.03;
 	}
@@ -179,16 +179,16 @@ void invKine(HANDJnt ref_jnt_ang, HANDJnt prepare_jnt_ang1, double time, double 
 	{
 		Lp = Lpr;
 	}
-	else if(finger_type == LEFT_FINGER)
+	else if (finger_type == LEFT_FINGER)
 	{
 		Lp = Lpl;
 	}
-	else if(finger_type == MIDDLE_FINGER)
+	else if (finger_type == MIDDLE_FINGER)
 	{
 		Lp = Lpl;
 	}
-	double qw1 = (atan2(xm, zm) - atan2(sqrt(xm * xm + zm * zm - Lw0 * Lw0), Lw0));//xm * xm + zm * zm - Lw0 * Lw0>=0
-	if(xm * xm + zm * zm - Lw0 * Lw0 < 0.0) 
+	double qw1 = (atan2(xm, zm) - atan2(sqrt(xm * xm + zm * zm - Lw0 * Lw0), Lw0)); //xm * xm + zm * zm - Lw0 * Lw0>=0
+	if (xm * xm + zm * zm - Lw0 * Lw0 < 0.0)
 	{
 		return;
 	}
@@ -199,12 +199,12 @@ void invKine(HANDJnt ref_jnt_ang, HANDJnt prepare_jnt_ang1, double time, double 
 	{
 		tb = ym + Lr + Lp;
 	}
-	else if(finger_type == MIDDLE_FINGER)
+	/*else if(finger_type == MIDDLE_FINGER)
 	{
 		tb = ym + Lr + Lp;
-	}
+	}*/
 	double C3 = (ta * ta + tb * tb - L1 * L1 - L2 * L2) / (2 * L1 * L2);
-	if(C3 > 1.0 || C3 < -1.0)
+	if (C3 > 1.0 || C3 < -1.0)
 	{
 		return;
 	}
@@ -218,14 +218,15 @@ void invKine(HANDJnt ref_jnt_ang, HANDJnt prepare_jnt_ang1, double time, double 
 	{
 		C = ym + Lr + Lp;
 	}
-	else if(finger_type == MIDDLE_FINGER)
+	/*else if(finger_type == MIDDLE_FINGER)
 	{
 		C = ym + Lr + Lp;
-	}
-	if(A * A + B * B - C * C < 0.0)
+	}*/
+
+	if (A * A + B * B - C * C < 0.0)
 	{
-		 return;
-	}		 
+		return;
+	}
 	double q2 = atan2(A, B) - atan2(sqrt(A * A + B * B - C * C), C); //A * A + B * B - C * C>=0
 	if (finger_type == LEFT_FINGER)
 	{
@@ -234,14 +235,14 @@ void invKine(HANDJnt ref_jnt_ang, HANDJnt prepare_jnt_ang1, double time, double 
 		ref_jnt_ang[HAND02_M1] = q2;
 		ref_jnt_ang[HAND02_M2] = q3;
 	}
-	else if(finger_type == RIGHT_FINGER)
+	else if (finger_type == RIGHT_FINGER)
 	{
 		//ref_jnt_ang[HAND02_M9] = zm;
 		ref_jnt_ang[HAND02_M10] = -qw1;
 		ref_jnt_ang[HAND02_M5] = q2;
 		ref_jnt_ang[HAND02_M6] = q3;
 	}
-	else if(finger_type == MIDDLE_FINGER)
+	else if (finger_type == MIDDLE_FINGER)
 	{
 		ref_jnt_ang[HAND02_M10] = -qw1;
 		ref_jnt_ang[HAND02_M3] = q2;
@@ -250,127 +251,65 @@ void invKine(HANDJnt ref_jnt_ang, HANDJnt prepare_jnt_ang1, double time, double 
 }
 
 //平方根の中身が負になるのでX,Yの値の調節が必要
-void UturnKine(HANDJnt ref_jnt_ang, HANDJnt prepare_jnt_ang1, double TRAJ_RATE3, double time, double stime, double angle, double cog_x , double cog_y)
+void UturnKine(HANDJnt ref_jnt_ang, HANDJnt prepare_jnt_ang1, double TRAJ_RATE3, double time, double stime, double angle, double cog_x, double cog_y)
 {
 	//逆運動学で指先に円軌道生成し指先でキューブを回す
 	double X = cog_x;
 	double Y = cog_y;
 	double theta_s = PI / 6;
-	double FP = 0.0085;//人差し指半径　人差し指指先関節リンク長は0.0525
+	double FP = 0.0085; //人差し指半径　人差し指指先関節リンク長は0.0525
 	double cube_d = 0.0555;
 	double QO = cube_d / 2;
 	double PO = QO / cos(theta_s);
-	double theta = PI / 2.0 + theta_s + (time - stime) * PI / 2.0;
+	double theta = PI / 2.0 + theta_s + 10 * (time - stime) * PI / 2.0;
 	double FO = FP + PO;
 	double x = X + FO * cos(theta);
 	double y = Y + FO * sin(theta);
-	/*
-	double l1 = 0.0639;
-	double l2 = 0.0525 - FP;
-	double d1 = (x * x + y * y + l1 * l1 - l2 * l2) / (2.0 * l1);
-	double d2 = (x * x + y * y - l1 * l1 + l2 * l2) / (2.0 * l2);
-	double theta1 = -(atan2(y, x) + atan2(sqrt(x * x + y * y - d1 * d1), d1)) + PI / 2.0;
-	double theta2 = -(-atan2(sqrt(x * x + y * y - d2 * d2), d2) - atan2(sqrt(x * x + y * y - d1 * d1), d1));
-	*/
-	
-	/*if (theta1 > PI/2 || theta1 < -PI/2)
-		theta1 = 0;
-	if (theta2 > PI/2 || theta2 < -PI/2)
-		theta2 = 0;
-	*/
 
-	double step1 = 1.0;
-	double step2 = 2.0;
-	double step3 = 3.0;
+	double step1 = 0.1;
+	double step2 = 0.2;
+	double step3 = 0.3;
 	//step1　回転動作
-	if (time - stime < step1)// && (time  >  stime))
+	if (time - stime < step1) // && (time  >  stime))
 	{
 		invKine(ref_jnt_ang, prepare_jnt_ang1, time, 0.0, 0.0, x, y, 0.135, MIDDLE_FINGER);
-		//ref_jnt_ang[HAND02_M3] = d1;
-		//ref_jnt_ang[HAND02_M4] = d2;
-		//ref_jnt_ang[HAND02_M5] = atan2(sqrt(x * x + y * y - d1 * d1), d1);
-		//ref_jnt_ang[HAND02_M6] = atan2(sqrt(x * x + y * y - d2 * d2), d2);
-		//ref_jnt_ang[HAND02_M7] = x * x + y * y - d1 * d1;
-		//ref_jnt_ang[HAND02_M8] = x * x + y * y - d2 * d2;
 	}
 	//step2 指先を最大限まで曲げて元に戻す
-	else if(time - stime < step2)
+	else if (time - stime < step2)
 	{
-		ref_jnt_ang[HAND02_M3] = PI / 4;
-		ref_jnt_ang[HAND02_M4] = PI / 2;	
-	}
-	else if(time - stime < step3)
-	{
-		ref_jnt_ang[HAND02_M3] = 0.0;
+		ref_jnt_ang[HAND02_M3] = PI / 6;
 		ref_jnt_ang[HAND02_M4] = PI / 2;
-		
 	}
-}
-//人差し指で１面回転
-void Uturn(HANDJnt ref_jnt_ang, HANDJnt prepare_jnt_ang1, double TRAJ_RATE3, double time, double stime, double angle)
-{
-	double TRAJ_RAD = PI / 4.0;
-	double t1 = stime;
-	if ((time - t1) < 0.012) //1.2
+	else if (time - stime < step3)
 	{
-		ref_jnt_ang[HAND02_M3] = TRAJ_RAD * 1.1 / 2 * (1.0 - cos(2.0 * PI * (time - t1) * TRAJ_RATE3)) + prepare_jnt_ang1[HAND02_M3];
-	}
-	else if ((time - t1) < 0.035) //1.2~3.5
-	{
-		ref_jnt_ang[HAND02_M3] = TRAJ_RAD / 2 * 1.1 * (1.0 - cos(2.0 * PI * (time - t1) * TRAJ_RATE3)) + prepare_jnt_ang1[HAND02_M3];
-		ref_jnt_ang[HAND02_M4] = -TRAJ_RAD * (1.0 - cos(2.0 * PI * ((time - t1) - 0.012) * TRAJ_RATE3)) + prepare_jnt_ang1[HAND02_M4];
-	}
-	else if ((time - t1) < 0.1) //3.5~10.0
-	{
-		double rate3 = -TRAJ_RAD * (1.0 - cos(2.0 * PI * (0.035 - 0.012) * TRAJ_RATE3)) + prepare_jnt_ang1[HAND02_M4];
-
-		ref_jnt_ang[HAND02_M3] = TRAJ_RAD / 2 * 1.1 * (1.0 - cos(2.0 * PI * (time - t1) * TRAJ_RATE3)) + prepare_jnt_ang1[HAND02_M3];
-
-		//if((time - t1) < 4.8)
-		//	ref_jnt_ang[HAND02_M4] = -TRAJ_RAD * (1.0 - cos(2.0 * PI * (4.8 - (time - t1)) * TRAJ_RATE1)) + prepare_jnt_ang1[HAND02_M4];
-		if ((time - t1) < 0.04)
-		{
-			ref_jnt_ang[HAND02_M4] = rate3;
-		}
-		else if ((time - t1) > 0.04 && (time - t1) < 0.08)
-		{
-			ref_jnt_ang[HAND02_M4] = rate3 - (rate3 / 0.04) * ((time - t1) - 0.04);
-		}
-		else
-		{
-			ref_jnt_ang[HAND02_M4] = 0.0;
-		}
-	}
-	else if (time - t1 < 0.11)
-	{
-		ref_jnt_ang[HAND02_M3] = prepare_jnt_ang1[HAND02_M3];
-		ref_jnt_ang[HAND02_M4] = prepare_jnt_ang1[HAND02_M4];
+		ref_jnt_ang[HAND02_M3] = -PI / 4;
+		ref_jnt_ang[HAND02_M4] = PI / 2;
 	}
 }
 //Xturnでは重心位置の制限が強すぎたので重心位置から下へ1ブロック,手前に0.5ブロックの位置を把持して持ち上げる戦略
-void Xturn2(HANDJnt ref_jnt_ang, HANDJnt prepare_jnt_ang1, double TRAJ_RATE3, double time, double stime, double angle , double cog_x , double cog_y)
+void Xturn2(HANDJnt ref_jnt_ang, HANDJnt prepare_jnt_ang1, double TRAJ_RATE3, double time, double stime, double angle, double cog_x, double cog_y)
 {
-	double cube_d = 0.0555;//キューブの直径WeiLong GTS2　　白いやつは　0.0565m
-	double offset = 0.005;//把持力に関係している　大きくすると強く把持してキューブが回転しないかもしれない。小さくてもキューブが把持できない。
+	double cube_d = 0.0555; //キューブの直径WeiLong GTS2　　白いやつは　0.0565m
+	double offset = 0.005;  //把持力に関係している　大きくすると強く把持してキューブが回転しないかもしれない。小さくてもキューブが把持できない。
 	int use_right = 1;
 	int use_left = 0;
-	double xs = cog_x - cube_d / 6;//キューブの1列目と2列目の中間を持つ
+	double xs = cog_x - cube_d / 6; //キューブの1列目と2列目の中間を持つ
 	double ys = cube_d / 2 + r - offset;
 	double zs = 0.105;
 
-	double xe = 0.130;//目標位置
+	double xe = 0.130; //目標位置
 	double ze;
-	double base_h = 0.28;//土台の高さ
-	double base_r = 0.195;//土台からロボット座標の原点までの高さ
+	double base_h = 0.28;  //土台の高さ
+	double base_r = 0.195; //土台からロボット座標の原点までの高さ
 	double z = 0.105;
-	double z_top = base_h - base_r + (2 * cube_d) / 3 + 0.004;//キューブの上層と中層の間のZ座標　0.005は少し持ち上げたほうが回転ミスが減るから
-	double z_bottom = base_h - base_r + cube_d / 6;//一番下の把持位置 キューブの底面ブロックの真ん中のZ座標
+	double z_top = base_h - base_r + (2 * cube_d) / 3 + 0.004; //キューブの上層と中層の間のZ座標　0.005は少し持ち上げたほうが回転ミスが減るから
+	double z_bottom = base_h - base_r + cube_d / 6;			   //一番下の把持位置 キューブの底面ブロックの真ん中のZ座標
 
 	///step1 キューブを把持
 	double step1 = 0.1;
 	double step2 = 0.3;
 	double step3 = 0.4;
-	if(time - stime < step1)
+	if (time - stime < step1)
 	{
 		//ys = ys + 2 * offset * cos(5 * PI * (time - stime));//この時点でキューブに触れると動くので
 		//z = zs - (zs - z_bottom) * sin(5 * PI * (time - stime));//sinが0.0→1.0と動く
@@ -379,8 +318,8 @@ void Xturn2(HANDJnt ref_jnt_ang, HANDJnt prepare_jnt_ang1, double TRAJ_RATE3, do
 		z = zs - (zs - z_bottom) * 10 * (time - stime);
 		invKine(ref_jnt_ang, prepare_jnt_ang1, time, 0.0, 0.0, xs, -ys, z, RIGHT_FINGER);
 		invKine(ref_jnt_ang, prepare_jnt_ang1, time, 0.0, 0.0, xs, ys, z, LEFT_FINGER);
-	}//step2 キューブを持ち上げる
-	else if(time - stime < step2)
+	} //step2 キューブを持ち上げる
+	else if (time - stime < step2)
 	{
 		//z = z_bottom + (z_top - z_bottom) * sin(2.5 * PI * (time - stime - step1));//sinが0.0→1.0
 		//xs = xs + (xe - xs) * sin(2.5 * PI * (time - stime - step1));
@@ -388,8 +327,8 @@ void Xturn2(HANDJnt ref_jnt_ang, HANDJnt prepare_jnt_ang1, double TRAJ_RATE3, do
 		xs = xs + (xe - xs) * 5 * (time - stime - step1);
 		invKine(ref_jnt_ang, prepare_jnt_ang1, time, 0.0, 0.0, xs, -ys, z, RIGHT_FINGER);
 		invKine(ref_jnt_ang, prepare_jnt_ang1, time, 0.0, 0.0, xs, ys, z, LEFT_FINGER);
-	}//step3　指先を元の位置に戻す
-	else if(time - stime < step3)
+	} //step3　指先を元の位置に戻す
+	else if (time - stime < step3)
 	{
 		//z = z_top - (z_top - z) * sin(5 * PI * (time - stime - step2));
 		z = z_top - (z_top - z) * 10 * (time - stime - step2);
@@ -401,11 +340,10 @@ void Xturn2(HANDJnt ref_jnt_ang, HANDJnt prepare_jnt_ang1, double TRAJ_RATE3, do
 	//ref_jnt_ang[HAND02_M9] = z;
 	//ref_jnt_ang[HAND02_M3] = xs;
 	//ref_jnt_ang[HAND02_M8] = ys;
-
 }
 
 //手首回転を利用したx軸回転 x = 0.13では逆運動学がおかしくなる　x = 0.12なら大丈夫だった
-void Xturn(HANDJnt ref_jnt_ang, HANDJnt prepare_jnt_ang1, double TRAJ_RATE3, double time, double stime, double angle , double cog_x , double cog_y)
+void Xturn(HANDJnt ref_jnt_ang, HANDJnt prepare_jnt_ang1, double TRAJ_RATE3, double time, double stime, double angle, double cog_x, double cog_y)
 {
 	/*
 	double TRAJ_RAD = 2 * PI * 30 / 360;
@@ -428,25 +366,25 @@ void Xturn(HANDJnt ref_jnt_ang, HANDJnt prepare_jnt_ang1, double TRAJ_RATE3, dou
 		rate = 2.0 * PI * DEMO1_TIME1 * TRAJ_RATE2;
 		ref_jnt_ang[HAND02_M10] = TRAJ_RAD / 4 * (1.0 - cos(2.0 * PI * (2 * DEMO1_TIME1 - (time - stime)) * TRAJ_RATE2)) + prepare_jnt_ang1[HAND02_M10];
 	}*/
-	double cube_d = 0.0555;//キューブの直径WeiLong GTS2　　白いやつは　0.0565m
-	double offset = 0.002;//把持力に関係している　大きくすると強く把持してキューブが回転しないかもしれない。小さくてもキューブが把持できない。
+	double cube_d = 0.0555; //キューブの直径WeiLong GTS2　　白いやつは　0.0565m
+	double offset = 0.002;  //把持力に関係している　大きくすると強く把持してキューブが回転しないかもしれない。小さくてもキューブが把持できない。
 	int use_right = 1;
 	int use_left = 0;
-	double xs = cog_x - cube_d / 3;//キューブ手前列の真ん中を持つ
+	double xs = cog_x - cube_d / 3; //キューブ手前列の真ん中を持つ
 	double ys = cube_d / 2 + r - offset;
 	double zs = 0.105;
 
-	double xe = 0.120;//0.135;//目標位置
+	double xe = 0.120; //0.135;//目標位置
 	double ze;
 
 	double z = 0.105;
 	double z_top = 0.1306;
-	double z_bottom = 0.0929;//一番下の把持位置
+	double z_bottom = 0.0929; //一番下の把持位置
 	///step1 キューブを把持
 	double step1 = 0.1;
 	double step2 = 0.3;
 	double step3 = 0.4;
-	if(time - stime < step1)
+	if (time - stime < step1)
 	{
 		//ys = ys + 2 * offset * cos(5 * PI * (time - stime));//この時点でキューブに触れると動くので
 		//z = zs - (zs - z_bottom) * sin(5 * PI * (time - stime));//sinが0.0→1.0と動く
@@ -454,29 +392,28 @@ void Xturn(HANDJnt ref_jnt_ang, HANDJnt prepare_jnt_ang1, double TRAJ_RATE3, dou
 		z = zs - (zs - z_bottom) * 10 * (time - stime);
 		invKine(ref_jnt_ang, prepare_jnt_ang1, time, 0.0, 0.0, xs, -ys, z, use_right);
 		invKine(ref_jnt_ang, prepare_jnt_ang1, time, 0.0, 0.0, xs, ys, z, use_left);
-	}//step2 キューブを持ち上げる
-	else if(time - stime < step2)
+	} //step2 キューブを持ち上げる
+	else if (time - stime < step2)
 	{
 		//x=0.1340,z = 0.1145あたりでおかしい挙動
 		//z = z_bottom + (z_top - z_bottom) * sin(2.5 * PI * (time - stime - step1));//sinが0.0→1.0
 		//xs = xs + (xe - xs) * sin(2.5 * PI * (time - stime - step1));
 		z = z_bottom + (z_top - z_bottom) * 5 * (time - stime - step1);
-		xs = xs + (xe - xs) * 5 *(time - stime - step1);
+		xs = xs + (xe - xs) * 5 * (time - stime - step1);
 		invKine(ref_jnt_ang, prepare_jnt_ang1, time, 0.0, 0.0, xs, -ys, z, use_right);
 		invKine(ref_jnt_ang, prepare_jnt_ang1, time, 0.0, 0.0, xs, ys, z, use_left);
-	}//step3　指先を元の位置に戻す
-	else if(time - stime < step3)
+	} //step3　指先を元の位置に戻す
+	else if (time - stime < step3)
 	{
 		//z = z_top - (z_top - z) * sin(5 * PI * (time - stime - step2));
 		z = z_top - (z_top - z) * 10 * (time - stime - step2);
-		ys = ys + 2 * offset * 10 * (time - stime -step2);
+		ys = ys + 2 * offset * 10 * (time - stime - step2);
 		invKine(ref_jnt_ang, prepare_jnt_ang1, time, 0.0, 0.0, xe, -ys, z, use_right);
 		invKine(ref_jnt_ang, prepare_jnt_ang1, time, 0.0, 0.0, xe, ys, z, use_left);
 	}
 	//ref_jnt_ang[HAND02_M9] = z;
 	//ref_jnt_ang[HAND02_M3] = xs;
 	//ref_jnt_ang[HAND02_M8] = ys;
-
 }
 
 //指先を利用したy軸回転
@@ -508,11 +445,11 @@ void Yturn(HANDJnt ref_jnt_ang, HANDJnt prepare_jnt_ang1, double TRAJ_RATE3, dou
 //左指，中指，右指，左指旋回，右指旋回，手首旋回，手首屈曲
 //static HANDJnt prepare_jnt_ang1 = {-PI / 2.0, 0.0, -PI / 2.0, 0.0, -PI / 2.0, 0.0, -PI / 3.0 * 2.0 + PI / 36.0, PI / 3.0 * 2.0 - PI / 36.0, 0.0, 0.0};
 //連続動作用の初期値static HANDJnt prepare_jnt_ang1 = {2 * PI * 2 / 360, 0.0, 0.0, -5 * PI / 90, 2 * PI * 2 / 360, 0.0, 0.0, 0, 0.0, 0.0};
-static HANDJnt prepare_jnt_ang1 = {0.0, 0.0,		//左指
-								   0.0, 0.0,		//中指
-								   0.0, 0.0,		//右指
+static HANDJnt prepare_jnt_ang1 = {0.0, 0.0,	   //左指
+								   0.0, 0.0,	   //中指
+								   0.0, 0.0,	   //右指
 								   -1.006147, 0.0, //左指旋回　右指旋回
-								   0.0, 0.0};		//手首旋回　手首屈曲
+								   0.0, 0.0};	  //手首旋回　手首屈曲
 
 int hand02TrajDemo1(HANDJnt ref_jnt_ang, HANDJnt data, Object obj, double time, double *sensor, double *camera)
 {
@@ -529,26 +466,8 @@ int hand02TrajDemo1(HANDJnt ref_jnt_ang, HANDJnt data, Object obj, double time, 
 	for (jnt = 0; jnt < HAND_JNT; jnt++)
 		ref_jnt_ang[jnt] = prepare_jnt_ang1[jnt];
 
-	/*if (time < 2.0)
-	{
-		ref_jnt_ang[HAND02_M1] = PI / 6 * (1.0 - cos(2.0 * PI * time * TRAJ_RATE3)) + prepare_jnt_ang1[HAND02_M1];
-	}*/
-	//UturnKine(ref_jnt_ang, prepare_jnt_ang1, TRAJ_RATE3, time, 2.0, camera[3]);
-	//char hand_type = 'r';
-	//forKine(ref_jnt_ang, prepare_jnt_ang1, hand_type);
-/*
-	double X = 0.13;
-	double Y = 0.03;
-	double theta = 7 / 6 * PI + 0.2 * time * PI / 2.0;
-	double r = 0.03;
-	double x = X + r * cos(theta);
-	double y = Y + r * sin(theta);
-	double xm = x;
-	double ym = y;
-	double zm = 0.105;
-*/
-//デバック用
-/*
+	//デバック用
+	/*
 double cube_d = 0.0555;
 double x = camera[1];
 double y = cube_d / 2 + r + 0.005;
@@ -557,31 +476,31 @@ invKine(ref_jnt_ang, prepare_jnt_ang1, time, 0.0, 0.0, x, -y, z, 1);
 invKine(ref_jnt_ang, prepare_jnt_ang1, time, 0.0, 0.0, x, y, z, 0);
 */
 
-//初期位置へ移動
-if(time < 2.0)
-{
-	cog_x = camera[1];
-	cog_y = camera[2];
-	double cube_d = 0.0555;//キューブの直径WeiLong GTS2　　白いやつは　0.0565m
-	double offset = 0.002;//把持力に関係している　大きくすると強く把持してキューブが回転しないかもしれない。小さくてもキューブが把持できない。
-	double xs = 0.130;//cog_x - cube_d / 6;//キューブ手前列の真ん中を持つ
-	double ys = cube_d / 2 + r - offset;//+ 2 * offset;
-	double zs = 0.105;
-	invKine(ref_jnt_ang, prepare_jnt_ang1, time, 0.0, 0.0, xs, -ys, zs, RIGHT_FINGER);
-	invKine(ref_jnt_ang, prepare_jnt_ang1, time, 0.0, 0.0, xs, ys, zs, LEFT_FINGER);
-	invKine(ref_jnt_ang, prepare_jnt_ang1, time, 0.0, 0.0, xs, ys, 0.135, MIDDLE_FINGER);
+	//初期位置へ移動
+	if (time < 2.0)
+	{
+		cog_x = camera[1];
+		cog_y = camera[2];
+		double cube_d = 0.0555;						 //キューブの直径WeiLong GTS2　　白いやつは　0.0565m
+		double offset = 0.002;						 //把持力に関係している　大きくすると強く把持してキューブが回転しないかもしれない。小さくてもキューブが把持できない。
+		double xs = 0.130;							 //cog_x - cube_d / 6;//キューブ手前列の真ん中を持つ
+		double ys = cube_d / 2 + r - offset - 0.003; //+ 2 * offset;
+		double zs = 0.105;
+		invKine(ref_jnt_ang, prepare_jnt_ang1, time, 0.0, 0.0, xs, -ys, zs, RIGHT_FINGER);
+		invKine(ref_jnt_ang, prepare_jnt_ang1, time, 0.0, 0.0, xs, ys, zs, LEFT_FINGER);
+		invKine(ref_jnt_ang, prepare_jnt_ang1, time, 0.0, 0.0, xs, ys, 0.135, MIDDLE_FINGER);
 
-	ref_jnt_ang[HAND02_M1] *= (0.5 * time);  
-	ref_jnt_ang[HAND02_M2] *= (0.5 * time);
-	ref_jnt_ang[HAND02_M3] *= (0.5 * time);  
-	ref_jnt_ang[HAND02_M4] *= (0.5 * time);  
-	ref_jnt_ang[HAND02_M5] *= (0.5 * time);  
-	ref_jnt_ang[HAND02_M6] *= (0.5 * time);  
-	ref_jnt_ang[HAND02_M10] *= (0.5 * time); 
-}
+		ref_jnt_ang[HAND02_M1] *= (0.5 * time);
+		ref_jnt_ang[HAND02_M2] *= (0.5 * time);
+		ref_jnt_ang[HAND02_M3] *= (0.5 * time);
+		ref_jnt_ang[HAND02_M4] *= (0.5 * time);
+		ref_jnt_ang[HAND02_M5] *= (0.5 * time);
+		ref_jnt_ang[HAND02_M6] *= (0.5 * time);
+		ref_jnt_ang[HAND02_M10] *= (0.5 * time);
+	}
 
-//手首を利用した回転　逆運動学利用ver
-/*
+	//手首を利用した回転　逆運動学利用ver
+	/*
 	for(int i = 1; i <= 10 ; i++){
 		double interval = 0.4;
 		if(time < 2.0) break;
@@ -603,35 +522,35 @@ if(time < 2.0)
 		//ref_jnt_ang[HAND02_M9] = cog_x;
 	}
 */
- if(time > 2.0 && time < 5.0)
- {
-	double cube_d = 0.0555;//キューブの直径WeiLong GTS2　　白いやつは　0.0565m
-	double offset = 0.002;//把持力に関係している　大きくすると強く把持してキューブが回転しないかもしれない。小さくてもキューブが把持できない。
-	double xs = 0.130;//cog_x - cube_d / 6;//キューブ手前列の真ん中を持つ
-	double ys = cube_d / 2 + r - offset;//+ 2 * offset;
-	double zs = 0.105;
-	invKine(ref_jnt_ang, prepare_jnt_ang1, time, 0.0, 0.0, xs, ys, zs, LEFT_FINGER);
-	invKine(ref_jnt_ang, prepare_jnt_ang1, time, 0.0, 0.0, xs, -ys, zs, RIGHT_FINGER);
-	UturnKine(ref_jnt_ang, prepare_jnt_ang1, TRAJ_RATE3, time, 2.0, camera[3], cog_x , cog_y);
- }
-
-
-//	手首を利用した回転
-/*
-	if (time < 10)
+	for (int i = 1; i <= 10; i++)
 	{
-		double cube_d = 0.057;//キューブ直径m
-		double offset = 0.002;//把持力に関係している　大きくすると強く把持してキューブが回転しないかもしれない。小さくてもキューブが把持できない。
-		int use_right = 1;
-		int use_left = 0;
-		double xm = 0.12;
-		double ym = cube_d/2 + r - offset;
-		double zm = 0.105;
-		zm = zm + 0.019 * sin(5 * PI * time);
-		invKine(ref_jnt_ang, prepare_jnt_ang1, time, 0.0, 0.0, xm, -ym, zm, use_right);
-		invKine(ref_jnt_ang, prepare_jnt_ang1, time, 0.0, 0.0, xm, ym, zm, use_left);
+		double interval = 0.3;
+		if (time < 2.0)
+			break;
+		if (time < 2.0 + interval * i)
+		{
+			if (cog_write)
+			{
+				cog_x = camera[1];
+				cog_y = camera[2];
+				cog_write = 0;
+			}
+			double cube_d = 0.0555;						 //キューブの直径WeiLong GTS2　　白いやつは　0.0565m
+			double offset = 0.002;						 //把持力に関係している　大きくすると強く把持してキューブが回転しないかもしれない。小さくてもキューブが把持できない。
+			double xs = 0.130;							 //cog_x - cube_d / 6;//キューブ手前列の真ん中を持つ
+			double ys = cube_d / 2 + r - offset - 0.003; //+ 2 * offset;
+			double zs = 0.105;
+			invKine(ref_jnt_ang, prepare_jnt_ang1, time, 0.0, 0.0, xs, ys, zs, LEFT_FINGER);
+			invKine(ref_jnt_ang, prepare_jnt_ang1, time, 0.0, 0.0, xs, -ys, zs, RIGHT_FINGER);
+			UturnKine(ref_jnt_ang, prepare_jnt_ang1, TRAJ_RATE3, time, 2.0 + interval * (i - 1), camera[3], cog_x, cog_y);
+			if (time > 2.0 + interval * i - 0.002)
+			{
+				cog_write = 1;
+			}
+			break;
+		}
 	}
-*/	
+
 	//関数版
 	/*if(time < 2.0)
 	{
@@ -651,118 +570,6 @@ if(time < 2.0)
 	}*/
 
 	//Uturn(ref_jnt_ang, prepare_jnt_ang1, TRAJ_RATE3, time, camera[3]);
-	//手首を利用した回転
-	/*if (time < 0.25)
-	{
-		ref_jnt_ang[HAND02_M9] = TRAJ_RAD / 4 * (1.0 - cos(2.0 * PI * time * 2.0)) + prepare_jnt_ang1[HAND02_M9];
-	}else if (time < 2*0.25)
-	{	
-		rate = 2.0 * PI * DEMO1_TIME1 * 2.0;
-		ref_jnt_ang[HAND02_M6] = -PI/4 + prepare_jnt_ang1[HAND02_M6];
-		ref_jnt_ang[HAND02_M9] = TRAJ_RAD / 4 * (1.0 - cos(2.0 * PI * (2*DEMO1_TIME1-time) * 2.0)) + prepare_jnt_ang1[HAND02_M9];
-	}*/
-	//人差し指で回転
-	/*if (time < 1.2)
-	{
-		ref_jnt_ang[HAND02_M3] = TRAJ_RAD * 1.1 / 2 * (1.0 - cos(2.0 * PI * time * TRAJ_RATE1)) + prepare_jnt_ang1[HAND02_M3];
-	}
-	else if (time < 3.5)
-	{
-		ref_jnt_ang[HAND02_M3] = TRAJ_RAD / 2 * 1.1 * (1.0 - cos(2.0 * PI * time * TRAJ_RATE1)) + prepare_jnt_ang1[HAND02_M3];
-		ref_jnt_ang[HAND02_M4] = -TRAJ_RAD * (1.0 - cos(2.0 * PI * (time - 1.2) * TRAJ_RATE1)) + prepare_jnt_ang1[HAND02_M4];
-	}
-	else if (time < 10.0)
-	{
-		double rate3 = -TRAJ_RAD * (1.0 - cos(2.0 * PI * (3.5-1.2) * TRAJ_RATE1)) + prepare_jnt_ang1[HAND02_M4];
-
-		ref_jnt_ang[HAND02_M3] = TRAJ_RAD / 2 * 1.1 * (1.0 - cos(2.0 * PI * time * TRAJ_RATE1)) + prepare_jnt_ang1[HAND02_M3];
-		
-		//if(time < 4.8)
-		//	ref_jnt_ang[HAND02_M4] = -TRAJ_RAD * (1.0 - cos(2.0 * PI * (4.8 - time) * TRAJ_RATE1)) + prepare_jnt_ang1[HAND02_M4];
-		if(time < 4.0){
-			ref_jnt_ang[HAND02_M4] = rate3;
-		}else if (time > 4.0 && time < 8.0)
-		{
-			ref_jnt_ang[HAND02_M4] = rate3 - (rate3 / 4) * (time - 4.0);
-		}else{
-			ref_jnt_ang[HAND02_M4] = 0.0;
-		}
-
-	}
-	else
-	{
-		ref_jnt_ang[HAND02_M4] = 0.0;
-	}*/
-
-	//高速人差し指回転
-	/*double t1=0.11;
-	if (time < 0.012) //1.2
-	{
-		ref_jnt_ang[HAND02_M3] = TRAJ_RAD * 1.1 / 2 * (1.0 - cos(2.0 * PI * time * TRAJ_RATE3)) + prepare_jnt_ang1[HAND02_M3];
-	}
-	else if (time < 0.035) //1.2~3.5
-	{
-		ref_jnt_ang[HAND02_M3] = TRAJ_RAD / 2 * 1.1 * (1.0 - cos(2.0 * PI * time * TRAJ_RATE3)) + prepare_jnt_ang1[HAND02_M3];
-		ref_jnt_ang[HAND02_M4] = -TRAJ_RAD * (1.0 - cos(2.0 * PI * (time - 0.012) * TRAJ_RATE3)) + prepare_jnt_ang1[HAND02_M4];
-	}
-	else if (time < 0.1) //3.5~10.0
-	{
-		double rate3 = -TRAJ_RAD * (1.0 - cos(2.0 * PI * (0.035 - 0.012) * TRAJ_RATE3)) + prepare_jnt_ang1[HAND02_M4];
-
-		ref_jnt_ang[HAND02_M3] = TRAJ_RAD / 2 * 1.1 * (1.0 - cos(2.0 * PI * time * TRAJ_RATE3)) + prepare_jnt_ang1[HAND02_M3];
-
-		//if(time < 4.8)
-		//	ref_jnt_ang[HAND02_M4] = -TRAJ_RAD * (1.0 - cos(2.0 * PI * (4.8 - time) * TRAJ_RATE1)) + prepare_jnt_ang1[HAND02_M4];
-		if (time < 0.04)
-		{
-			ref_jnt_ang[HAND02_M4] = rate3;
-		}
-		else if (time > 0.04 && time < 0.08)
-		{
-			ref_jnt_ang[HAND02_M4] = rate3 - (rate3 / 0.04) * (time - 0.04);
-		}
-		else
-		{
-			ref_jnt_ang[HAND02_M4] = 0.0;
-		}
-	}else if(time<0.11){
-		ref_jnt_ang[HAND02_M3] = prepare_jnt_ang1[HAND02_M3];
-		ref_jnt_ang[HAND02_M4] = prepare_jnt_ang1[HAND02_M4];
-	}
-	else if ((time - t1) < 0.012) //1.2
-	{
-		ref_jnt_ang[HAND02_M3] = TRAJ_RAD * 1.1 / 2 * (1.0 - cos(2.0 * PI * (time - t1) * TRAJ_RATE3)) + prepare_jnt_ang1[HAND02_M3];
-	}
-	else if ((time - t1) < 0.035) //1.2~3.5
-	{
-		ref_jnt_ang[HAND02_M3] = TRAJ_RAD / 2 * 1.1 * (1.0 - cos(2.0 * PI * (time - t1) * TRAJ_RATE3)) + prepare_jnt_ang1[HAND02_M3];
-		ref_jnt_ang[HAND02_M4] = -TRAJ_RAD * (1.0 - cos(2.0 * PI * ((time - t1) - 0.012) * TRAJ_RATE3)) + prepare_jnt_ang1[HAND02_M4];
-	}
-	else if ((time - t1) < 0.1) //3.5~10.0
-	{
-		double rate3 = -TRAJ_RAD * (1.0 - cos(2.0 * PI * (0.035 - 0.012) * TRAJ_RATE3)) + prepare_jnt_ang1[HAND02_M4];
-
-		ref_jnt_ang[HAND02_M3] = TRAJ_RAD / 2 * 1.1 * (1.0 - cos(2.0 * PI * (time - t1) * TRAJ_RATE3)) + prepare_jnt_ang1[HAND02_M3];
-
-		//if((time - t1) < 4.8)
-		//	ref_jnt_ang[HAND02_M4] = -TRAJ_RAD * (1.0 - cos(2.0 * PI * (4.8 - (time - t1)) * TRAJ_RATE1)) + prepare_jnt_ang1[HAND02_M4];
-		if ((time - t1) < 0.04)
-		{
-			ref_jnt_ang[HAND02_M4] = rate3;
-		}
-		else if ((time - t1) > 0.04 && (time - t1) < 0.08)
-		{
-			ref_jnt_ang[HAND02_M4] = rate3 - (rate3 / 0.04) * ((time - t1) - 0.04);
-		}
-		else
-		{
-			ref_jnt_ang[HAND02_M4] = 0.0;
-		}
-	}
-	else if(time-t1 <0.11){
-		ref_jnt_ang[HAND02_M3] = prepare_jnt_ang1[HAND02_M3];
-		ref_jnt_ang[HAND02_M4] = prepare_jnt_ang1[HAND02_M4];
-	}*/
 
 	/*if (time < DEMO1_TIME1)
 	{
