@@ -22,21 +22,21 @@ HANDCtrlCoef hand_ctrl_coef = {{7.0, 10.0, 7.0, 10.0, 7.0, 10.0, 7.0, 7.0, 12.0,
 */
 
 //手首旋回制御あり
-/*
+
 HANDCtrlCoef hand_ctrl_coef = {{15.0, 20.0, 15.0, 20.0, 15.0, 20.0, 15.0, 15.0, 10.0, 25.0}, // Kp
 							   {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0},			 // Ti
 							   {60.0, 75.0, 60.0, 75.0, 60.0, 75.0, 30.0, 30.0, 30.0, 75.0}, // Td
 							   {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0},			 // Cf
 							   1.0};														 // Kg
-*/
+
 //手首旋回制御なし
 
-static HANDCtrlCoef hand_ctrl_coef = {{15.0, 20.0, 15.0, 20.0, 15.0, 20.0, 15.0, 15.0, 0.0, 25.0}, // Kp
+/*static HANDCtrlCoef hand_ctrl_coef = {{15.0, 20.0, 15.0, 20.0, 15.0, 20.0, 15.0, 15.0, 0.0, 25.0}, // Kp
 									  {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0},		   // Ti
 									  {60.0, 75.0, 60.0, 75.0, 60.0, 75.0, 60.0, 60.0, 0.0, 75.0}, // Td
 									  {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0},		   // Cf
 									  1.0};														   // Kg
-
+*/
 //手首旋回制御なし，展示用（指先のゲイン小さく）
 /*
 HANDCtrlCoef hand_ctrl_coef = {{15.0, 10.0, 15.0, 10.0, 15.0, 10.0, 15.0, 15.0, 0.0, 25.0},	// Kp
@@ -165,7 +165,7 @@ void invKine(HANDJnt ref_jnt_ang, HANDJnt prepare_jnt_ang1, double time, double 
 	double L2 = 0.0365;
 	if (finger_type == MIDDLE_FINGER)
 	{
-		L2 = 0.0525;
+		L2 = 0.0525 - 0.0085;//指先の半球の半径0.0085mを引いた長さ
 	}
 	double Lw0 = 0.105;
 	if (finger_type == MIDDLE_FINGER)
@@ -256,19 +256,21 @@ void UturnKine(HANDJnt ref_jnt_ang, HANDJnt prepare_jnt_ang1, double TRAJ_RATE3,
 	//逆運動学で指先に円軌道生成し指先でキューブを回す
 	double X = cog_x;
 	double Y = cog_y;
-	double theta_s = PI / 6;
+	double theta_s = PI / 12;
 	double FP = 0.0085; //人差し指半径　人差し指指先関節リンク長は0.0525
 	double cube_d = 0.0555;
 	double QO = cube_d / 2;
 	double PO = QO / cos(theta_s);
-	double theta = PI / 2.0 + theta_s + 10 * (time - stime) * PI / 2.0;
+	double theta = PI / 2.0 + theta_s + 2 * (time - stime) * PI / 2.0;
 	double FO = FP + PO;
 	double x = X + FO * cos(theta);
 	double y = Y + FO * sin(theta);
 
-	double step1 = 0.1;
-	double step2 = 0.2;
-	double step3 = 0.3;
+	double step1 = 0.5;
+	double step2 = 0.6;
+	double step3 = 0.7;
+	double step4 = 0.8;
+	double step5 = 1.00;
 	//step1　回転動作
 	if (time - stime < step1) // && (time  >  stime))
 	{
@@ -282,17 +284,25 @@ void UturnKine(HANDJnt ref_jnt_ang, HANDJnt prepare_jnt_ang1, double TRAJ_RATE3,
 	}
 	else if (time - stime < step3)
 	{
-		ref_jnt_ang[HAND02_M3] = -PI / 4;
+		ref_jnt_ang[HAND02_M3] = -PI / 9;
 		ref_jnt_ang[HAND02_M4] = PI / 2;
+	}
+	else if (time - stime < step4)
+	{
+		ref_jnt_ang[HAND02_M3] = -PI / 9;;
+		ref_jnt_ang[HAND02_M4] = 0;
+	}
+	else if (time - stime < step5)
+	{
+		ref_jnt_ang[HAND02_M3] = 0;
+		ref_jnt_ang[HAND02_M4] = 0;
 	}
 }
 //Xturnでは重心位置の制限が強すぎたので重心位置から下へ1ブロック,手前に0.5ブロックの位置を把持して持ち上げる戦略
 void Xturn2(HANDJnt ref_jnt_ang, HANDJnt prepare_jnt_ang1, double TRAJ_RATE3, double time, double stime, double angle, double cog_x, double cog_y)
 {
 	double cube_d = 0.0555; //キューブの直径WeiLong GTS2　　白いやつは　0.0565m
-	double offset = 0.005;  //把持力に関係している　大きくすると強く把持してキューブが回転しないかもしれない。小さくてもキューブが把持できない。
-	int use_right = 1;
-	int use_left = 0;
+	double offset = 0.004;  //把持力に関係している　大きくすると強く把持してキューブが回転しないかもしれない。小さくてもキューブが把持できない。
 	double xs = cog_x - cube_d / 6; //キューブの1列目と2列目の中間を持つ
 	double ys = cube_d / 2 + r - offset;
 	double zs = 0.105;
@@ -415,21 +425,77 @@ void Xturn(HANDJnt ref_jnt_ang, HANDJnt prepare_jnt_ang1, double TRAJ_RATE3, dou
 	//ref_jnt_ang[HAND02_M3] = xs;
 	//ref_jnt_ang[HAND02_M8] = ys;
 }
+void Yturn2(HANDJnt ref_jnt_ang, HANDJnt prepare_jnt_ang1, double TRAJ_RATE3, double time, double stime, double angle, double cog_x, double cog_y)
+{
+	double theta = PI / 6;
+	double tan_vec_x_r = cos(-theta);
+	double tan_vec_y_r = sin(-theta);
+	double tan_vec_x_l = cos(PI + theta);
+	double tan_vec_y_l = sin(PI + theta); 
+	double cube_d = 0.0555;						 //キューブの直径WeiLong GTS2　　白いやつは　0.0565m
+	double offset = 0.005;						 //把持力に関係している　大きくすると強く把持してキューブが回転しないかもしれない。小さくてもキューブが把持できない。
+	double xs = 0.140;							 //cog_x - cube_d / 6;//キューブ手前列の真ん中を持つ
+	double ys = cube_d / 2 + r - offset;
+	double z = 0.105;
+	double step1 = 0.01;
+	double step2 = 0.035;
+	double step3 = 0.06;
+	//ready
+	if(time - stime < step1)
+	{
+		invKine(ref_jnt_ang, prepare_jnt_ang1, time, 0.0, 0.0, xs + tan_vec_x_r, -ys + tan_vec_y_r, z, RIGHT_FINGER);
+		invKine(ref_jnt_ang, prepare_jnt_ang1, time, 0.0, 0.0, xs + tan_vec_x_l, ys + tan_vec_y_l, z, LEFT_FINGER);
+	} 
+	//throw
+	else if (time - stime < step2)
+	{
+		tan_vec_x_r = 0.015 / 0.025 * (time - stime - step1) * tan_vec_x_r;
+		tan_vec_y_r = 0.015 / 0.025 * (time - stime - step1) * tan_vec_y_r;
+		tan_vec_x_l =  0.015 / 0.025 * (time - stime - step1) * tan_vec_x_l;
+		tan_vec_y_l =  0.015 / 0.025 * (time - stime - step1) * tan_vec_y_l;
+		invKine(ref_jnt_ang, prepare_jnt_ang1, time, 0.0, 0.0, xs + tan_vec_x_r, -ys + tan_vec_y_r, z, RIGHT_FINGER);
+		invKine(ref_jnt_ang, prepare_jnt_ang1, time, 0.0, 0.0, xs + tan_vec_x_l, ys + tan_vec_y_l, z, LEFT_FINGER);
+	}
+	else if(time - stime < step3)
+	{
+		tan_vec_x_r = 0.015 * tan_vec_x_r;
+		tan_vec_y_r = 0.015 * tan_vec_y_r;
+		tan_vec_x_l =  0.015 * tan_vec_x_l;
+		tan_vec_y_l =  0.015 * tan_vec_y_l;
+		invKine(ref_jnt_ang, prepare_jnt_ang1, time, 0.0, 0.0, xs + tan_vec_x_r, -ys + tan_vec_y_r, z, RIGHT_FINGER);
+		invKine(ref_jnt_ang, prepare_jnt_ang1, time, 0.0, 0.0, xs + tan_vec_x_l, ys + tan_vec_y_l, z, LEFT_FINGER);
+		ref_jnt_ang[HAND02_M1] = - PI / 6;
+		ref_jnt_ang[HAND02_M5] = 0;
+	}
+	//Catch
+	else if (angle > 70.0 || angle < 20.0)
+	{
+		tan_vec_x_r = 0 * tan_vec_x_r;
+		tan_vec_y_r = 0 * tan_vec_y_r;
+		tan_vec_x_l = 0 * tan_vec_x_l;
+		tan_vec_y_l = 0 * tan_vec_y_l;
+		invKine(ref_jnt_ang, prepare_jnt_ang1, time, 0.0, 0.0, xs + tan_vec_x_r, -ys + tan_vec_y_r, z, RIGHT_FINGER);
+		invKine(ref_jnt_ang, prepare_jnt_ang1, time, 0.0, 0.0, xs + tan_vec_x_l, ys + tan_vec_y_l, z, LEFT_FINGER);
+	}
+}
 
 //指先を利用したy軸回転
 void Yturn(HANDJnt ref_jnt_ang, HANDJnt prepare_jnt_ang1, double TRAJ_RATE3, double time, double stime, double angle)
 {
-	if ((time - stime) < 0.025)
+	
+	//throw
+	if (time - stime < 0.025)
 	{
 		ref_jnt_ang[HAND02_M6] = PI / 90 * 10 * (1.0 - cos(2.0 * PI * (time - stime) * TRAJ_RATE3)) + prepare_jnt_ang1[HAND02_M2];
 		ref_jnt_ang[HAND02_M2] = -PI / 4 * (1.0 - cos(2.0 * PI * (time - stime) * TRAJ_RATE3)) + prepare_jnt_ang1[HAND02_M6];
 	}
-	else if ((time - stime) < 0.05)
+	else if (time - stime < 0.05)
 	{
 		ref_jnt_ang[HAND02_M1] = -PI / 25 * (1.0 - cos(2.0 * PI * (time - stime) * TRAJ_RATE3)) + prepare_jnt_ang1[HAND02_M1];
 		ref_jnt_ang[HAND02_M5] = -PI / 25 * (1.0 - cos(2.0 * PI * (time - stime) * TRAJ_RATE3)) + prepare_jnt_ang1[HAND02_M5];
 	}
-	else if (angle > 70 || angle < 20)
+	//Catch
+	else if (angle > 70.0 || angle < 20.0)
 	{
 		ref_jnt_ang[HAND02_M1] = prepare_jnt_ang1[HAND02_M1];
 		ref_jnt_ang[HAND02_M5] = prepare_jnt_ang1[HAND02_M5];
@@ -482,29 +548,28 @@ invKine(ref_jnt_ang, prepare_jnt_ang1, time, 0.0, 0.0, x, y, z, 0);
 		cog_x = camera[1];
 		cog_y = camera[2];
 		double cube_d = 0.0555;						 //キューブの直径WeiLong GTS2　　白いやつは　0.0565m
-		double offset = 0.002;						 //把持力に関係している　大きくすると強く把持してキューブが回転しないかもしれない。小さくてもキューブが把持できない。
-		double xs = 0.130;							 //cog_x - cube_d / 6;//キューブ手前列の真ん中を持つ
-		double ys = cube_d / 2 + r - offset - 0.003; //+ 2 * offset;
+		double offset = 0.005;						 //把持力に関係している　大きくすると強く把持してキューブが回転しないかもしれない。小さくてもキューブが把持できない。
+		double xs = 0.140;							 //cog_x - cube_d / 6;//キューブ手前列の真ん中を持つ
+		double ys = cube_d / 2 + r ; //- offset;// - 0.004; //+ 2 * offset;
 		double zs = 0.105;
 		invKine(ref_jnt_ang, prepare_jnt_ang1, time, 0.0, 0.0, xs, -ys, zs, RIGHT_FINGER);
 		invKine(ref_jnt_ang, prepare_jnt_ang1, time, 0.0, 0.0, xs, ys, zs, LEFT_FINGER);
-		invKine(ref_jnt_ang, prepare_jnt_ang1, time, 0.0, 0.0, xs, ys, 0.135, MIDDLE_FINGER);
+		//invKine(ref_jnt_ang, prepare_jnt_ang1, time, 0.0, 0.0, xs, ys, 0.135, MIDDLE_FINGER);
 
 		ref_jnt_ang[HAND02_M1] *= (0.5 * time);
 		ref_jnt_ang[HAND02_M2] *= (0.5 * time);
-		ref_jnt_ang[HAND02_M3] *= (0.5 * time);
-		ref_jnt_ang[HAND02_M4] *= (0.5 * time);
+		//ref_jnt_ang[HAND02_M3] *= (0.5 * time);
+		//ref_jnt_ang[HAND02_M4] *= (0.5 * time);
 		ref_jnt_ang[HAND02_M5] *= (0.5 * time);
 		ref_jnt_ang[HAND02_M6] *= (0.5 * time);
 		ref_jnt_ang[HAND02_M10] *= (0.5 * time);
 	}
 
 	//手首を利用した回転　逆運動学利用ver
-	/*
 	for(int i = 1; i <= 10 ; i++){
-		double interval = 0.4;
+		double interval = 0.6;
 		if(time < 2.0) break;
-		if(time < 2.0 + interval * i)
+		if(time > 2.0 + interval * (i - 1) && time < 2.0 + interval * i - 0.2)
 		{
 			if(cog_write)
 			{
@@ -513,18 +578,24 @@ invKine(ref_jnt_ang, prepare_jnt_ang1, time, 0.0, 0.0, x, y, z, 0);
 				cog_write = 0;
 			}
 			Xturn2(ref_jnt_ang, prepare_jnt_ang1, TRAJ_RATE3, time, 2.0 + interval * (i - 1), camera[3], cog_x , cog_y);
-			if(time > 2.0 + interval * i - 0.002)
+			if(time > 2.0 + interval * i - 0.002 - 0.2)
 			{
 				cog_write = 1;
 			}
 			break;
 		}
+		else if(time < 2.0 + interval * i)
+		{
+			Yturn2(ref_jnt_ang, prepare_jnt_ang1, TRAJ_RATE3, time, 2.0 + interval * (i - 1) + 0.4 , camera[3], cog_x , cog_y);
+			break;
+		}
 		//ref_jnt_ang[HAND02_M9] = cog_x;
 	}
-*/
+
+/* U面回転　連続動作
 	for (int i = 1; i <= 10; i++)
 	{
-		double interval = 0.3;
+		double interval = 1.0;
 		if (time < 2.0)
 			break;
 		if (time < 2.0 + interval * i)
@@ -537,8 +608,8 @@ invKine(ref_jnt_ang, prepare_jnt_ang1, time, 0.0, 0.0, x, y, z, 0);
 			}
 			double cube_d = 0.0555;						 //キューブの直径WeiLong GTS2　　白いやつは　0.0565m
 			double offset = 0.002;						 //把持力に関係している　大きくすると強く把持してキューブが回転しないかもしれない。小さくてもキューブが把持できない。
-			double xs = 0.130;							 //cog_x - cube_d / 6;//キューブ手前列の真ん中を持つ
-			double ys = cube_d / 2 + r - offset - 0.003; //+ 2 * offset;
+			double xs = 0.140;							 //cog_x - cube_d / 6;//キューブ手前列の真ん中を持つ
+			double ys = cube_d / 2 + r - offset - 0.004; //+ 2 * offset;
 			double zs = 0.105;
 			invKine(ref_jnt_ang, prepare_jnt_ang1, time, 0.0, 0.0, xs, ys, zs, LEFT_FINGER);
 			invKine(ref_jnt_ang, prepare_jnt_ang1, time, 0.0, 0.0, xs, -ys, zs, RIGHT_FINGER);
@@ -550,7 +621,14 @@ invKine(ref_jnt_ang, prepare_jnt_ang1, time, 0.0, 0.0, x, y, z, 0);
 			break;
 		}
 	}
-
+*/
+ //Y回転
+ /*
+	if (time > 2.0 && time < 10.0)
+	{
+		Yturn2(ref_jnt_ang, prepare_jnt_ang1, TRAJ_RATE3, time, 2.0, camera[3], cog_x, cog_y);
+	}
+	*/
 	//関数版
 	/*if(time < 2.0)
 	{
@@ -570,45 +648,6 @@ invKine(ref_jnt_ang, prepare_jnt_ang1, time, 0.0, 0.0, x, y, z, 0);
 	}*/
 
 	//Uturn(ref_jnt_ang, prepare_jnt_ang1, TRAJ_RATE3, time, camera[3]);
-
-	/*if (time < DEMO1_TIME1)
-	{
-		ref_jnt_ang[HAND02_M1] = TRAJ_RAD * (1.0 - cos(2.0 * PI * time * TRAJ_RATE1)) + prepare_jnt_ang1[HAND02_M1];
-		ref_jnt_ang[HAND02_M3] = TRAJ_RAD * (1.0 - cos(2.0 * PI * time * TRAJ_RATE1)) + prepare_jnt_ang1[HAND02_M3];
-		ref_jnt_ang[HAND02_M5] = TRAJ_RAD * (1.0 - cos(2.0 * PI * time * TRAJ_RATE1)) + prepare_jnt_ang1[HAND02_M5];
-		ref_jnt_ang[HAND02_M2] = TRAJ_RAD * (1.0 - cos(2.0 * PI * time * TRAJ_RATE1)) + prepare_jnt_ang1[HAND02_M2];
-		ref_jnt_ang[HAND02_M4] = TRAJ_RAD * (1.0 - cos(2.0 * PI * time * TRAJ_RATE1)) + prepare_jnt_ang1[HAND02_M4];
-		ref_jnt_ang[HAND02_M6] = TRAJ_RAD * (1.0 - cos(2.0 * PI * time * TRAJ_RATE1)) + prepare_jnt_ang1[HAND02_M6];
-	}
-	else if (time < DEMO1_TIME2)
-	{
-		rate = 2.0 * PI * DEMO1_TIME1 * TRAJ_RATE1;
-		ref_jnt_ang[HAND02_M1] = TRAJ_RAD * (1.0 - cos(2.0 * PI * time * TRAJ_RATE2 - rate)) + prepare_jnt_ang1[HAND02_M1];
-		ref_jnt_ang[HAND02_M3] = TRAJ_RAD * (1.0 - cos(2.0 * PI * time * TRAJ_RATE2 - rate)) + prepare_jnt_ang1[HAND02_M3];
-		ref_jnt_ang[HAND02_M5] = TRAJ_RAD * (1.0 - cos(2.0 * PI * time * TRAJ_RATE2 - rate)) + prepare_jnt_ang1[HAND02_M5];
-		ref_jnt_ang[HAND02_M2] = TRAJ_RAD * (1.0 - cos(2.0 * PI * time * TRAJ_RATE2 - rate)) + prepare_jnt_ang1[HAND02_M2];
-		ref_jnt_ang[HAND02_M4] = TRAJ_RAD * (1.0 - cos(2.0 * PI * time * TRAJ_RATE2 - rate)) + prepare_jnt_ang1[HAND02_M4];
-		ref_jnt_ang[HAND02_M6] = TRAJ_RAD * (1.0 - cos(2.0 * PI * time * TRAJ_RATE2 - rate)) + prepare_jnt_ang1[HAND02_M6];
-	}
-	else if (time < DEMO1_TIME3)
-	{
-		rate = 2.0 * PI * DEMO1_TIME2 * TRAJ_RATE2;
-		ref_jnt_ang[HAND02_M1] = TRAJ_RAD * (1.0 - cos(2.0 * PI * time * TRAJ_RATE3 - rate)) + prepare_jnt_ang1[HAND02_M1];
-		ref_jnt_ang[HAND02_M3] = TRAJ_RAD * (1.0 - cos(2.0 * PI * time * TRAJ_RATE3 - rate)) + prepare_jnt_ang1[HAND02_M3];
-		ref_jnt_ang[HAND02_M5] = TRAJ_RAD * (1.0 - cos(2.0 * PI * time * TRAJ_RATE3 - rate)) + prepare_jnt_ang1[HAND02_M5];
-		ref_jnt_ang[HAND02_M2] = TRAJ_RAD * (1.0 - cos(2.0 * PI * time * TRAJ_RATE3 - rate)) + prepare_jnt_ang1[HAND02_M2];
-		ref_jnt_ang[HAND02_M4] = TRAJ_RAD * (1.0 - cos(2.0 * PI * time * TRAJ_RATE3 - rate)) + prepare_jnt_ang1[HAND02_M4];
-		ref_jnt_ang[HAND02_M6] = TRAJ_RAD * (1.0 - cos(2.0 * PI * time * TRAJ_RATE3 - rate)) + prepare_jnt_ang1[HAND02_M6];
-	}
-	else
-	{
-		ref_jnt_ang[HAND02_M2] = 0.0;
-		ref_jnt_ang[HAND02_M4] = 0.0;
-		ref_jnt_ang[HAND02_M6] = 0.0;
-		ref_jnt_ang[HAND02_M1] = 0.0;
-		ref_jnt_ang[HAND02_M3] = 0.0;
-		ref_jnt_ang[HAND02_M5] = 0.0;
-	}*/
 	return 0;
 }
 
